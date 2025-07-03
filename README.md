@@ -20,4 +20,4 @@ The source code for OpenWRT Builder is released under the GNU Affero General Pub
 ## Donations
 All donations are appreciated and help me stay awake at night to work on this more. Even if it's not much, it helps more than not in the long run! You can even become a sponsor of me if you're okay with a recurring monthly charge.
 
-![GitHub Sponsors](https://img.shields.io/github/sponsors/JoshuaDoes?style=for-the-badge&labelColor=%23FAFAFA&color=%231C1C1C)
+[![GitHub Sponsors](https://img.shields.io/github/sponsors/JoshuaDoes?style=for-the-badge&labelColor=%23FAFAFA&color=%231C1C1C)](https://github.com/sponsors/JoshuaDoes)
