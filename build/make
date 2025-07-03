@@ -89,12 +89,12 @@ update_src() {
   fi
 }
 sync() {
-  if [[ -z "$ARCH" || -z "$PLATFORM" ]]; then
-    error "Must lunch a target!"
-  else
-    # Check for OpenWRT updates
-    update_src
+  # Check for OpenWRT updates
+  update_src
 
+  if [[ -z "$ARCH" || -z "$PLATFORM" ]]; then
+    error "Must lunch a target to update package feeds!"
+  else
     # Update feeds list and download missing build dependencies
     update_feeds
   fi
