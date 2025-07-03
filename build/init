@@ -1,0 +1,60 @@
+GIT="https://github.com/openwrt/openwrt"
+
+# Directory macros
+export ROOT="$PWD"
+export BUILD="$PWD/build"
+export SRC="$ROOT/src"
+export CFG="$ROOT/configs"
+export FEED="$ROOT/feeds"
+export TARGET="$ROOT/targets"
+
+# Target macros
+export ARCH=""
+export PLATFORM=""
+export CPUABI=""
+export PROFILE=""
+export OUT=""
+export OUTPKG=""
+export SYSUPGRADE=""
+export FIRMWARE=""
+
+# Navigation handling
+cd_pwd() {
+  cd "$ROOT"
+}
+cd_builder() {
+  cd "$SRC"
+}
+cd_cfg() {
+  cd "$CFG"
+}
+cd_feed() {
+  cd "$FEED"
+}
+cd_out() {
+  cd "$OUT"
+}
+cd_outpkg() {
+  cd "$OUTPKG"
+}
+
+# Hide outputs when unnecessary
+mkdir() {
+  command mkdir "$@" >/dev/null
+}
+rm() {
+  command rm "$@" >/dev/null
+}
+mv() {
+  command mv "$@" >/dev/null
+}
+cp() {
+  command cp "$@" >/dev/null
+}
+
+# Error handling
+error() {
+  echo "$@" 2>&1
+}
+
+. "$BUILD/make"

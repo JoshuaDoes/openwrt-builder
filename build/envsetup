@@ -1,0 +1,9 @@
+##
+## Helper functions for the OpenWRT builders
+##
+
+if [[ ! -d "$PWD/build" ]]; then
+  echo "You must source this script from the root of the OpenWRT buildtree!" 2>&1
+else
+  . "$PWD/build/init"
+fi

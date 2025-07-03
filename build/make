@@ -1,0 +1,245 @@
+lunch_ls() {
+  ls "$TARGET"
+}
+lunch_print() {
+  echo "      ARCH: $ARCH"
+  echo "  PLATFORM: $PLATFORM"
+  echo "    CPUABI: $CPUABI"
+  echo "   PROFILE: $PROFILE"
+  echo "       OUT: $OUT"
+  echo "    OUTPKG: $OUTPKG"
+  echo "SYSUPGRADE: $SYSUPGRADE"
+  echo "  FIRMWARE: $FIRMWARE"
+}
+lunch() {
+  if [[ -z "$1" ]]; then
+    error "You must specify a lunch target!"
+    ls "$TARGET"
+  else
+    IMPORT="$1"
+    if [[ ! -f "$1" ]]; then
+      IMPORT="$TARGET/$1"
+    fi
+    if [[ ! -f "$IMPORT" ]]; then
+      error "Your lunch target is not valid!"
+      lunch_ls
+    else
+      . "$IMPORT"
+      export OUT="$ROOT/out/$ARCH/$PLATFORM"
+      export OUTPKG="$OUT/packages"
+      export FIRMWARE="$OUT/openwrt-$ARCH-$PLATFORM-$PROFILE-squashfs-sysupgrade.bin"
+      export SYSUPGRADE="sysupgrade/$ARCH-$PLATFORM-$PROFILE"
+      if [[ -z "$PROFILE" ]]; then
+        export PROFILE="generic"
+        FIRMWARE="$OUT/openwrt-$ARCH-$PLATFORM-squashfs-sysupgrade.bin"
+        SYSUPGRADE="sysupgrade/$ARCH-$PLATFORM"
+      fi
+      cd_builder
+      install_cfg
+      cd_pwd
+      lunch_print
+    fi
+  fi
+}
+
+update_feeds() {
+  if [[ -d "$FEED" ]]; then
+    cd_feed
+    # Start with our base feeds list
+    if [[ -f "feeds.conf" ]]; then
+      cp "feeds.conf" "$SRC/feeds.conf"
+    else
+      cp "$SRC/feeds.conf.default" "$SRC/feeds.conf"
+    fi
+    # Install our local feeds
+    for feed in */; do
+      if [[ -d "$feed" ]]; then
+        feed="$(basename $feed)"
+        echo "src-link $feed $FEED/$feed" >> "$SRC/feeds.conf"
+      fi
+    done
+    # Update local git repos
+    find . -type d -name .git -exec git --git-dir={} --work-tree=$PWD/{}/.. pull \;
+    cd_pwd
+  fi
+
+  cd_builder
+  # Update the package feeds
+  ./scripts/feeds update -a
+  ./scripts/feeds install -a
+  # Download OpenWRT build dependencies (skips cached!)
+  makereal download
+  cd_pwd
+}
+update_src() {
+  # Check if the source tree exists
+  if [[ -d "$SRC" ]]; then
+    # Check if we can just update the tree
+    if [[ -d "$SRC/.git" ]]; then
+      cd_builder
+      git pull
+    else
+      # Move the untracked source tree away
+      mv "$SRC" "$SRC.old"
+    fi
+  fi
+  # Clone a fresh copy if the source tree doesn't exist
+  if [[ ! -d "$SRC" ]]; then
+    git clone "$GIT" "$SRC"
+  fi
+}
+sync() {
+  if [[ -z "$ARCH" || -z "$PLATFORM" ]]; then
+    error "Must lunch a target!"
+  else
+    # Check for OpenWRT updates
+    update_src
+
+    # Update feeds list and download missing build dependencies
+    update_feeds
+  fi
+}
+
+makeprep() {
+  # Wipe previous builds for this target
+  rm -rf "$OUT"
+  rm -rf "$OUTPKG"
+
+  # Print the lunch target
+  lunch_print
+}
+makereal() {
+  command make "$@"
+}
+
+install_cfg() {
+  cd_builder
+  rm .config
+  echo "CONFIG_TARGET_${ARCH}=y" >> .config
+  echo "CONFIG_TARGET_${ARCH}_${PLATFORM}=y" >> .config
+  if [[ -n "$PROFILE" && "$PROFILE" != "generic" ]]; then
+    echo "Installing config for $ARCH/$PLATFORM/$PROFILE"
+    echo "CONFIG_TARGET_${ARCH}_${PLATFORM}_DEVICE_${PROFILE}=y" >> .config
+    echo "CONFIG_TARGET_MULTI_PROFILE=n" >> .config
+    echo "CONFIG_TARGET_ALL_PROFILES=n" >> .config
+  else
+    echo "[TODO] Support generic profile for install_out"
+    echo "Installing generic config for $ARCH/$PLATFORM"
+    echo "CONFIG_TARGET_MULTI_PROFILE=y" >> .config
+    echo "CONFIG_TARGET_ALL_PROFILES=y" >> .config
+  fi
+  if [[ -d "$CFG" ]]; then
+    cd_cfg
+    for cfg in */; do
+      if [[ -f "$cfg" ]]; then
+        cat "$cfg" >> "$SRC/.config"
+      fi
+    done
+    cd_builder
+  fi
+  makereal defconfig
+  cd_pwd
+}
+
+build_out() {
+  mkdir -p "$OUT"
+  filenames=( \
+    "openwrt-$ARCH-$PLATFORM-$PROFILE-squashfs-factory.img" \
+    "openwrt-$ARCH-$PLATFORM-$PROFILE-squashfs-sysupgrade.bin" \
+  )
+  for file in "${filenames[@]}"; do
+    mv bin/targets/$ARCH/$PLATFORM/$file "$OUT/"
+  done
+}
+build_firmware() {
+  # Prepare the build environment
+  makeprep
+
+  # Navigate to our builder
+  cd_builder
+
+  # Build the OpenWRT firmware
+  if [[ -z "$1" ]]; then
+    # Use our own defaults
+    makereal -j $(nproc) V=s
+  else
+    # Use the provided arguments, discarding what we'd set
+    makereal "$@"
+  fi
+
+  # Move the final output out of the tree
+  build_out
+
+  # Navigate back to root
+  cd_pwd
+
+  # Check to make sure that the build succeeded
+  if [[ -f "$FIRMWARE" ]]; then
+    # Install the build if an install script exists for it
+    if [[ -f "$SYSUPGRADE" ]]; then
+      # sysupgrade force-closes all shells, so anticipate an error code in cases like using ssh to call it
+      set +e
+      . "$SYSUPGRADE"
+      set -e
+    else
+      echo "OUT: $OUT"
+      ls -l "$OUT"
+    fi
+  else
+    error "Failed to build a firmware image!"
+  fi
+}
+build() {
+  if [[ -z "$ARCH" || -z "$PLATFORM" ]]; then
+    error "Must lunch a target!"
+  else
+    build_firmware "$@"
+  fi
+}
+make() {
+  build "$@"
+}
+
+package_out() {
+  mkdir -p "$OUTPKG"
+  filenames=( \
+    "$1-*.apk" \
+    "$1-*.opkg" \
+  )
+  for file in "${filenames[@]}"; do
+    mv bin/packages/$CPUABI/*/$file "$OUTPKG/"
+  done
+}
+package_build() {
+  PACKAGE="$1"
+
+  # Prepare the build environment
+  makeprep
+
+  # Navigate to our builder
+  cd_builder
+
+  # Clean any old builds of the specified package
+  makereal "package/$PACKAGE/clean"
+
+  # Build the specified package
+  makereal "package/$PACKAGE/compile" -j $(nproc) V=s
+
+  # Move the final output out of the tree
+  package_out "$PACKAGE"
+
+  # Navigate back to root
+  cd_pwd
+
+  echo "OUTPKG: $OUTPKG"
+  ls -l "$OUTPKG"
+}
+package() {
+  if [[ -z "$1" ]]; then
+    error "Must specify a package!"
+  elif [[ -z "$ARCH" || -z "$PLATFORM" ]]; then
+    error "Must lunch a target!"
+  else
+    package_build "$1"
+  fi
+}

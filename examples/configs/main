@@ -1,0 +1,14 @@
+# Use the latest Linux LTS kernel
+CONFIG_TESTING_KERNEL=y
+
+# Build dropbear with ed25519 key support
+CONFIG_DROPBEAR_ED25519=y
+
+# Install an SCP server for smooth sideloading support
+CONFIG_PACKAGE_openssh-sftp-server=y
+
+# Install nano as a vim alternative
+CONFIG_PACKAGE_nano-full=y
+
+# Install LuCI
+CONFIG_PACKAGE_luci=y
