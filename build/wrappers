@@ -65,7 +65,6 @@ clean() {
   rm -rf "$OUT"
 }
 makeprep() {
-  clean
   config
   target
 }
