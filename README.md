@@ -14,6 +14,31 @@ Because I felt like it, honestly. I put a little more time into this than I anti
 | `sysupgrade` | Calls a script at `sysupgrade/$ID` to sideload the provided `$FIRMWARE` image. See [examples/sysupgrade](examples/sysupgrade) for how to prepare this script. |
 | `clean` | Removes all built files from `$OUT` and `$OUTPKG`. Removes the entire out folder with no target for lunch. |
 
+## Example usage
+```
+#Required to import the build environment into your current shell.
+source build/envsetup
+
+#Required for the first time to get the OpenWRT source so the commands will be useful.
+sync
+
+#Required to select a lunch target.
+lunch netgear_r6020
+
+#Required for the first time to update and install your package feeds.
+#Optional, but will ensure `make download` in OpenWRT source tree to avoid networking during a build.
+sync
+
+# Make an entire firmware and copy it out.
+make
+
+# Sideload the most recently built firmware, or build a fresh firmware to sideload it if one isn't found.
+sysupgrade
+
+# Build a specific package and copy it out, i.e. one that your local feed might provide.
+package luci-theme-material3
+```
+
 ## Configurable for developer environments
 Check out the [examples](examples) to get started. It's an exercise for the reader to know what to do from here!
 
