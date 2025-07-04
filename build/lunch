@@ -38,7 +38,7 @@ lunch() {
       . "$BUILD/clearvars"
       . "$IMPORT"
       export ID="$ARCH-$PLATFORM-$PROFILE"
-      export IDP="$ARCH/$PLATFORM/$PROFILE"
+      export IDP="$(build_tag)/$ARCH/$PLATFORM/$PROFILE"
       if [ -z "$PROFILE" ]; then
         export PROFILE="generic"
         ID="$ARCH-$PLATFORM"
