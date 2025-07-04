@@ -13,8 +13,6 @@ config_build() {
     echo "Installing config for $ARCH/$PLATFORM/$PROFILE"
     {
       echo "CONFIG_TARGET_${ARCH}_${PLATFORM}_DEVICE_${PROFILE}=y"
-#      echo "CONFIG_TARGET_MULTI_PROFILE=n"
-#      echo "CONFIG_TARGET_ALL_PROFILES=n"
     } >> .config
   else
     echo "[TODO] Support generic profile for install_out"

@@ -62,6 +62,7 @@ makeprep() {
 diffconfig() {
   cd_src
   ./scripts/diffconfig.sh > "$1"
+  echo "Wrote diffconfig to $1"
   cd_pwd
 }
 feeds() {

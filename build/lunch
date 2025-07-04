@@ -25,15 +25,17 @@ lunch() {
       lunch_ls
     else
       . "$IMPORT"
-      export OUT="$ROOT/out/$ARCH/$PLATFORM"
-      export OUTPKG="$OUT/packages"
-      export FIRMWARE="$OUT/openwrt-$ARCH-$PLATFORM-$PROFILE-squashfs-sysupgrade.bin"
-      export SYSUPGRADE="sysupgrade/$ARCH-$PLATFORM-$PROFILE"
+      export ID="$ARCH-$PLATFORM-$PROFILE"
+      export IDP="$ARCH/$PLATFORM/$PROFILE"
       if [ -z "$PROFILE" ]; then
         export PROFILE="generic"
-        FIRMWARE="$OUT/openwrt-$ARCH-$PLATFORM-squashfs-sysupgrade.bin"
-        SYSUPGRADE="sysupgrade/$ARCH-$PLATFORM"
+        ID="$ARCH-$PLATFORM"
+        IDP="$ARCH/$PLATFORM"
       fi
+      export FIRMWARE="$OUT/openwrt-$ID-squashfs-sysupgrade.bin"
+      export OUT="$ROOT/out/$IDP"
+      export OUTPKG="$OUT/packages"
+      export SYSUPGRADE="sysupgrade/$ID"
       config
       lunch_print
     fi
