@@ -1,105 +1,3 @@
-lunch_ls() {
-  ls "$TARGET"
-}
-lunch_print() {
-  echo "      ARCH: $ARCH"
-  echo "  PLATFORM: $PLATFORM"
-  echo "    CPUABI: $CPUABI"
-  echo "   PROFILE: $PROFILE"
-  echo "       OUT: $OUT"
-  echo "    OUTPKG: $OUTPKG"
-  echo "SYSUPGRADE: $SYSUPGRADE"
-  echo "  FIRMWARE: $FIRMWARE"
-}
-lunch() {
-  if [[ -z "$1" ]]; then
-    error "You must specify a lunch target!"
-    ls "$TARGET"
-  else
-    IMPORT="$1"
-    if [[ ! -f "$1" ]]; then
-      IMPORT="$TARGET/$1"
-    fi
-    if [[ ! -f "$IMPORT" ]]; then
-      error "Your lunch target is not valid!"
-      lunch_ls
-    else
-      . "$IMPORT"
-      export OUT="$ROOT/out/$ARCH/$PLATFORM"
-      export OUTPKG="$OUT/packages"
-      export FIRMWARE="$OUT/openwrt-$ARCH-$PLATFORM-$PROFILE-squashfs-sysupgrade.bin"
-      export SYSUPGRADE="sysupgrade/$ARCH-$PLATFORM-$PROFILE"
-      if [[ -z "$PROFILE" ]]; then
-        export PROFILE="generic"
-        FIRMWARE="$OUT/openwrt-$ARCH-$PLATFORM-squashfs-sysupgrade.bin"
-        SYSUPGRADE="sysupgrade/$ARCH-$PLATFORM"
-      fi
-      cd_builder
-      install_cfg
-      cd_pwd
-      lunch_print
-    fi
-  fi
-}
-
-update_feeds() {
-  if [[ -d "$FEED" ]]; then
-    cd_feed
-    # Start with our base feeds list
-    if [[ -f "feeds.conf" ]]; then
-      cp "feeds.conf" "$SRC/feeds.conf"
-    else
-      cp "$SRC/feeds.conf.default" "$SRC/feeds.conf"
-    fi
-    # Install our local feeds
-    for feed in */; do
-      if [[ -d "$feed" ]]; then
-        feed="$(basename $feed)"
-        echo "src-link $feed $FEED/$feed" >> "$SRC/feeds.conf"
-      fi
-    done
-    # Update local git repos
-    find . -type d -name .git -exec git --git-dir={} --work-tree=$PWD/{}/.. pull \;
-    cd_pwd
-  fi
-
-  cd_builder
-  # Update the package feeds
-  ./scripts/feeds update -a
-  ./scripts/feeds install -a
-  # Download OpenWRT build dependencies (skips cached!)
-  makereal download
-  cd_pwd
-}
-update_src() {
-  # Check if the source tree exists
-  if [[ -d "$SRC" ]]; then
-    # Check if we can just update the tree
-    if [[ -d "$SRC/.git" ]]; then
-      cd_builder
-      git pull
-    else
-      # Move the untracked source tree away
-      mv "$SRC" "$SRC.old"
-    fi
-  fi
-  # Clone a fresh copy if the source tree doesn't exist
-  if [[ ! -d "$SRC" ]]; then
-    git clone "$GIT" "$SRC"
-  fi
-}
-sync() {
-  # Check for OpenWRT updates
-  update_src
-
-  if [[ -z "$ARCH" || -z "$PLATFORM" ]]; then
-    error "Must lunch a target to update package feeds!"
-  else
-    # Update feeds list and download missing build dependencies
-    update_feeds
-  fi
-}
-
 makeprep() {
   # Wipe previous builds for this target
   rm -rf "$OUT"
@@ -175,16 +73,8 @@ build_firmware() {
 
   # Check to make sure that the build succeeded
   if [[ -f "$FIRMWARE" ]]; then
-    # Install the build if an install script exists for it
-    if [[ -f "$SYSUPGRADE" ]]; then
-      # sysupgrade force-closes all shells, so anticipate an error code in cases like using ssh to call it
-      set +e
-      . "$SYSUPGRADE"
-      set -e
-    else
-      echo "OUT: $OUT"
-      ls -l "$OUT"
-    fi
+    echo "OUT: $OUT"
+    ls -l "$OUT"
   else
     error "Failed to build a firmware image!"
   fi
@@ -220,7 +110,7 @@ package_build() {
   cd_builder
 
   # Clean any old builds of the specified package
-  makereal "package/$PACKAGE/clean"
+  makereal "package/$PACKAGE/clean" -j $(nproc) V=s
 
   # Build the specified package
   makereal "package/$PACKAGE/compile" -j $(nproc) V=s

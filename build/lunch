@@ -1,0 +1,43 @@
+lunch_ls() {
+  ls "$TARGET"
+}
+lunch_print() {
+  echo "      ARCH: $ARCH"
+  echo "  PLATFORM: $PLATFORM"
+  echo "    CPUABI: $CPUABI"
+  echo "   PROFILE: $PROFILE"
+  echo "       OUT: $OUT"
+  echo "    OUTPKG: $OUTPKG"
+  echo "SYSUPGRADE: $SYSUPGRADE"
+  echo "  FIRMWARE: $FIRMWARE"
+}
+lunch() {
+  if [[ -z "$1" ]]; then
+    error "You must specify a lunch target!"
+    ls "$TARGET"
+  else
+    IMPORT="$1"
+    if [[ ! -f "$1" ]]; then
+      IMPORT="$TARGET/$1"
+    fi
+    if [[ ! -f "$IMPORT" ]]; then
+      error "Your lunch target is not valid!"
+      lunch_ls
+    else
+      . "$IMPORT"
+      export OUT="$ROOT/out/$ARCH/$PLATFORM"
+      export OUTPKG="$OUT/packages"
+      export FIRMWARE="$OUT/openwrt-$ARCH-$PLATFORM-$PROFILE-squashfs-sysupgrade.bin"
+      export SYSUPGRADE="sysupgrade/$ARCH-$PLATFORM-$PROFILE"
+      if [[ -z "$PROFILE" ]]; then
+        export PROFILE="generic"
+        FIRMWARE="$OUT/openwrt-$ARCH-$PLATFORM-squashfs-sysupgrade.bin"
+        SYSUPGRADE="sysupgrade/$ARCH-$PLATFORM"
+      fi
+      cd_builder
+      install_cfg
+      cd_pwd
+      lunch_print
+    fi
+  fi
+}

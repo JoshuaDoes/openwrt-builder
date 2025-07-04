@@ -57,4 +57,7 @@ error() {
   echo "$@" 2>&1
 }
 
+. "$BUILD/lunch"
+. "$BUILD/sync"
+. "$BUILD/sysupgrade"
 . "$BUILD/make"

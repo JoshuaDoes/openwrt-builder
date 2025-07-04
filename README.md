@@ -7,9 +7,10 @@ Because I felt like it, honestly. I put a little more time into this than I anti
 | `. build/envsetup` \|\| `source build/envsetup` | Imports the build environment into your shell to provide commands. |
 | `sync` | Installs/updates the latest OpenWRT snapshot source tree, updates your local feeds that contain git repos, and generates your local feed list. |
 | `lunch` | Lists available lunch targets. |
-| `lunch $TARGET` | Prepares the build environment to compile for `$TARGET`. |
+| `lunch $TARGET` | Prepares the build environment to compile for `$TARGET`. Ingests all configs found under `configs`. |
 | `make` | Compiles the OpenWRT firmware for your lunch target. Optionally passes args through to the underlying call to make. See below for automatic sysupgrade sideloads. |
 | `package $PACKAGE` | Compiles the specified package for your lunch target. |
+| `sysupgrade` | Calls a script at `sysupgrade/$ARCH-$PLATFORM-$PROFILE` to sideload the provided `$FIRMWARE` image. See [examples/sysupgrade](examples/sysupgrade) for how to prepare this script. |
 
 ## Configurable for developer environments
 Check out the [examples](examples) to get started. It's an exercise for the reader to know what to do from here!
