@@ -1,5 +1,5 @@
 config_out() {
-  cd_builder
+  cd_src
   mkdir_out
   diffconfig "$OUT/config.buildinfo"
   cd_pwd
