@@ -1,4 +1,4 @@
-# This sample only works if you have the `openssh-scp-server` package on your OpenWRT host!
+# This sample only works if you have the `openssh-sftp-server` package on your OpenWRT host!
 ## If installing it is not an option for you, consider writing (and submitting!) a custom alternative.
 
 # Import the build environment to access its commands.
@@ -6,7 +6,7 @@
 FW="$FIRMWARE"
 . "$BUILD/envsetup"
 
-# Don't exit when commands return an error code
+# Don't exit when commands return an error code.
 set +e
 
 # Define the host of your OpenWRT SSH server.
