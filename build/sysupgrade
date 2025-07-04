@@ -15,6 +15,7 @@ sysupgrade() {
     else
       make
       if [[ -f "$FIRMWARE" ]]; then
+        chmod +x "$SYSUPGRADE"
         bash "$SYSUPGRADE"
       else
         error "Firmware image not found!"
