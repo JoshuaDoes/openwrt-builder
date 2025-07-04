@@ -37,19 +37,22 @@ lunch() {
     else
       . "$BUILD/clearvars"
       . "$IMPORT"
-      export ID="$ARCH-$PLATFORM-$PROFILE"
-      export IDP="$(build_tag)/$ARCH/$PLATFORM/$PROFILE"
-      if [ -z "$PROFILE" ]; then
-        export PROFILE="generic"
-        ID="$ARCH-$PLATFORM"
-        IDP="$ARCH/$PLATFORM"
-      fi
-      export OUT="$ROOT/out/$IDP"
-      export OUTPKG="$OUT/packages"
-      export FIRMWARE="$OUT/openwrt-$ID-squashfs-sysupgrade.bin"
-      export SYSUPGRADE="sysupgrade/$ID"
+      relunch
       config
       target
     fi
   fi
+}
+relunch() {
+  export ID="$ARCH-$PLATFORM-$PROFILE"
+  export IDP="$(build_tag)/$ARCH/$PLATFORM/$PROFILE"
+  if [ -z "$PROFILE" ]; then
+    export PROFILE="generic"
+    ID="$ARCH-$PLATFORM"
+    IDP="$ARCH/$PLATFORM"
+  fi
+  export OUT="$ROOT/out/$IDP"
+  export OUTPKG="$OUT/packages"
+  export FIRMWARE="$OUT/openwrt-$ID-squashfs-sysupgrade.bin"
+  export SYSUPGRADE="sysupgrade/$ID"
 }

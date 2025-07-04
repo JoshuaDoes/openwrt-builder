@@ -79,6 +79,9 @@ sync() {
   if [ -z "$ID" ]; then
     target
   else
+    # Reinitialize the lunch variables in case the OpenWRT version changed
+    relunch
+
     # Update feeds list and download missing build dependencies
     update_feeds
   fi
