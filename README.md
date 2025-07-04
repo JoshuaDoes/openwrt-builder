@@ -6,6 +6,8 @@ Because I felt like it, honestly. I put a little more time into this than I anti
 | --- | --- |
 | `. build/envsetup` OR `source build/envsetup` | Imports the build environment into your shell to provide commands. |
 | `sync` | Installs/updates the latest OpenWRT snapshot source tree, updates your local feeds which contain git repos, and generates your local feed list. |
+| `sync release` OR `sync $TAG` | Switches to the latest release tag, or optionally a specified tag/branch, and runs a sync. |
+| `sync snapshot` | Switches back to the snapshot branch and runs a sync. |
 | `lunch` OR `targets` | Lists available lunch targets including symlinks in an alphabetical order. |
 | `lunch $TARGET` OR `target $TARGET` | Prepares the build environment to compile for `$TARGET`. Ingests all configs found under `configs`. |
 | `target` | Displays all details about the current lunch target (as printed elsewhere throughout the build). |
@@ -21,6 +23,9 @@ source build/envsetup
 
 #Required for the first time to get the OpenWRT source so the commands will be useful.
 sync
+
+#If you would prefer to use the latest release tag, now is the time to switch to it.
+sync release
 
 #Required to select a lunch target.
 lunch netgear_r6020
