@@ -44,18 +44,19 @@ error() {
 }
 
 # make
+clean() {
+  # Wipe previous builds for this target
+  rm -rf "$OUT"
+  rm -rf "$OUTPKG"
+}
+makeprep() {
+  clean
+  lunch_print
+}
 makereal() {
   cd_src
   command make "$@"
   cd_pwd
-}
-makeprep() {
-  # Wipe previous builds for this target
-  rm -rf "$OUT"
-  rm -rf "$OUTPKG"
-
-  # Print the lunch target
-  lunch_print
 }
 
 # OpenWRT commands
@@ -94,4 +95,3 @@ make() {
 makepkg() {
   package "$@"
 }
-
