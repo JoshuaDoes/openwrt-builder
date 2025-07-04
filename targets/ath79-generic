@@ -1,0 +1,4 @@
+# Configure the OpenWRT build (required values)
+export ARCH="ath79"
+export PLATFORM="generic"
+export CPUABI="mips_24kc"

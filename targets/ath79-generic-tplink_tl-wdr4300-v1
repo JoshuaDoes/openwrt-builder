@@ -1,0 +1,5 @@
+# Configure the OpenWRT build (required values)
+export ARCH="ath79"
+export PLATFORM="generic"
+export CPUABI="mips_24kc"
+export PROFILE="tplink_tl-wdr4300-v1"
