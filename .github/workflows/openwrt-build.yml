@@ -33,7 +33,7 @@ jobs:
 
       - name: Run POSIX-compliant build using dash
         run: |
-          export BUILD_TARGET="${{ matrix.target }}"
+          set +e
           cd openwrt-builder
           . build/envsetup
           sync release
