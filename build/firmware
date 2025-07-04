@@ -3,11 +3,13 @@ firmware_out() {
   cd_src
   for file in \
     "openwrt-$ID-squashfs-factory.img" \
+    "openwrt-$ID-squashfs-factory.bin" \
     "openwrt-$ID-squashfs-sysupgrade.bin"
   do
-    mv bin/targets/"$ARCH"/"$PLATFORM"/"$file" "$OUT/"
-    info "Installed $file"
-    warn "$(ls -l "$OUT/$file")"
+    if mv bin/targets/"$ARCH"/"$PLATFORM"/"$file" "$OUT/" 2>/dev/null; then
+      info "Installed $file"
+      warn "$(ls -l "$OUT/$file")"
+    fi
   done
   cd_pwd
 }
