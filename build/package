@@ -6,9 +6,10 @@ package_out() {
     for feed in *; do
       if [ -d "$feed" ]; then
         cd "$feed"
-        for file in "$1"-*.apk "$1"-*.opkg; do
+        for file in "$1"-*.apk "$1"_*.ipk; do
           if [ -f "$file" ]; then
-            mv "$file" "$OUTPKG/"
+            mkdir "$OUTPKG/$feed"
+            mv "$file" "$OUTPKG/$feed/"
             info "Installed $feed/$file"
           fi
         done
