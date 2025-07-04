@@ -5,8 +5,8 @@ Because I felt like it, honestly. I put a little more time into this than I anti
 | Command | Usage |
 | --- | --- |
 | `. build/envsetup` OR `source build/envsetup` | Imports the build environment into your shell to provide commands. |
-| `sync` | Installs/updates the latest OpenWRT snapshot source tree, updates your local feeds which contain git repos, and generates your local feed list. |
-| `sync release` OR `sync $TAG` | Switches to the latest release tag, or optionally a specified tag/branch, and runs a sync. |
+| `sync` | Installs/updates the OpenWRT source tree, updates your local feeds which contain git repos, and generates your local feed list. |
+| `sync release` OR `sync $TAG` | Switches to the latest release tag, or optionally a specified tag/branch, and runs a sync. Can also be used on first time setup. |
 | `sync snapshot` | Switches back to the snapshot branch and runs a sync. |
 | `lunch` OR `targets` | Lists available lunch targets including symlinks in an alphabetical order. |
 | `lunch $TARGET` OR `target $TARGET` | Prepares the build environment to compile for `$TARGET`. Ingests all configs found under `configs`. |
