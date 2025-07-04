@@ -54,12 +54,19 @@ clearvars() {
   . "$BUILD/clearvars"
 }
 clean() {
-  # Wipe previous builds for this target
+  if [ -z "$ID" ]; then
+    warn "Removing all built files"
+  else
+    warn "Removing all built files for $ID"
+    error "- $OUTPKG"
+    rm -rf "$OUTPKG"
+  fi
+  error "- $OUT"
   rm -rf "$OUT"
-  rm -rf "$OUTPKG"
 }
 makeprep() {
   clean
+  config
   target
 }
 makereal() {
