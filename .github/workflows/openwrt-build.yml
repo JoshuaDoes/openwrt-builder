@@ -37,13 +37,13 @@ jobs:
           cd openwrt-builder
           . build/envsetup
           sync release
-          lunch "$BUILD_TARGET"
+          lunch "${{ matrix.target }}"
           sync
           make
           sync snapshot
-          lunch "$BUILD_TARGET"
+          lunch "${{ matrix.target }}"
           make
-          zip -r "../openwrt-builder-$BUILD_TARGET.zip" out/
+          zip -r "../openwrt-builder-${{ matrix.target }}.zip" out/
 
       - name: Upload firmware artifact
         uses: actions/upload-artifact@v4
