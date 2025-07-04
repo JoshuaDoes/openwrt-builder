@@ -6,7 +6,7 @@ export BUILD="$PWD/build"
 export SRC="$ROOT/src"
 export CFG="$ROOT/configs"
 export FEED="$ROOT/feeds"
-export TARGET="$ROOT/targets"
+export LUNCHES="$ROOT/targets"
 
 . "$BUILD/clearvars"
 . "$BUILD/lunch"

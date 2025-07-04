@@ -1,5 +1,5 @@
 targets() {
-  ls "$TARGET"
+  ls "$LUNCHES"
 }
 target() {
   if [ -z "$1" ] && [ -n "$ID" ]; then
@@ -19,11 +19,11 @@ target() {
 lunch() {
   if [ -z "$1" ]; then
     error "You must specify a lunch target!"
-    ls "$TARGET"
+    targets
   else
     IMPORT="$1"
     if [ ! -f "$1" ]; then
-      IMPORT="$TARGET/$1"
+      IMPORT="$LUNCHES/$1"
     fi
     if [ ! -f "$IMPORT" ]; then
       error "Your lunch target is not valid!"
