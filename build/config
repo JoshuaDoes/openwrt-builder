@@ -1,0 +1,41 @@
+config_out() {
+  cd_builder
+  mkdir_out
+  diffconfig "$OUT/config.buildinfo"
+  cd_pwd
+}
+config_build() {
+  cd_src
+  rm .config
+  echo "CONFIG_TARGET_${ARCH}=y" >> .config
+  echo "CONFIG_TARGET_${ARCH}_${PLATFORM}=y" >> .config
+  if [ -n "$PROFILE" ] && [ "$PROFILE" != "generic" ]; then
+    echo "Installing config for $ARCH/$PLATFORM/$PROFILE"
+    {
+      echo "CONFIG_TARGET_${ARCH}_${PLATFORM}_DEVICE_${PROFILE}=y"
+#      echo "CONFIG_TARGET_MULTI_PROFILE=n"
+#      echo "CONFIG_TARGET_ALL_PROFILES=n"
+    } >> .config
+  else
+    echo "[TODO] Support generic profile for install_out"
+    echo "Installing generic config for $ARCH/$PLATFORM"
+    {
+      echo "CONFIG_TARGET_MULTI_PROFILE=y"
+      echo "CONFIG_TARGET_ALL_PROFILES=y"
+    } >> .config
+  fi
+  if [ -d "$CFG" ]; then
+    cd_cfg
+    for cfg in *; do
+      if [ -f "$cfg" ]; then
+        cat "$cfg" >> "$SRC/.config"
+      fi
+    done
+  fi
+  config_out
+  cd_pwd
+}
+config() {
+  config_build
+  makereal defconfig
+}

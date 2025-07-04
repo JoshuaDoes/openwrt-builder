@@ -34,9 +34,7 @@ lunch() {
         FIRMWARE="$OUT/openwrt-$ARCH-$PLATFORM-squashfs-sysupgrade.bin"
         SYSUPGRADE="sysupgrade/$ARCH-$PLATFORM"
       fi
-      cd_builder
-      install_cfg
-      cd_pwd
+      config
       lunch_print
     fi
   fi

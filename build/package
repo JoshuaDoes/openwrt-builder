@@ -1,0 +1,33 @@
+package_out() {
+  mkdir_outpkg
+  for file in "$1"-*.apk "$1"-*.opkg; do
+    mv bin/packages/"$CPUABI"/*/"$file" "$OUTPKG/"
+  done
+}
+package_build() {
+  PACKAGE="$1"
+
+  # Prepare the build environment
+  makeprep
+
+  # Clean any old builds of the specified package
+  makereal "package/$PACKAGE/clean" -j "$(nproc)" V=s
+
+  # Build the specified package
+  makereal "package/$PACKAGE/compile" -j "$(nproc)" V=s
+
+  # Move the final output out of the tree
+  package_out "$PACKAGE"
+
+  echo "OUTPKG: $OUTPKG"
+  ls -l "$OUTPKG"
+}
+package() {
+  if [ -z "$1" ]; then
+    error "Must specify a package!"
+  elif [ -z "$ARCH" ] || [ -z "$PLATFORM" ]; then
+    error "Must lunch a target!"
+  else
+    package_build "$1"
+  fi
+}

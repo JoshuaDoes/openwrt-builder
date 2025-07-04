@@ -1,0 +1,96 @@
+# Navigation handling
+cd_pwd() {
+  cd "$ROOT"
+}
+cd_src() {
+  cd "$SRC"
+}
+cd_cfg() {
+  cd "$CFG"
+}
+cd_feed() {
+  cd "$FEED"
+}
+cd_out() {
+  cd "$OUT"
+}
+cd_outpkg() {
+  cd "$OUTPKG"
+}
+mkdir_out() {
+  mkdir "$OUT"
+}
+mkdir_outpkg() {
+  mkdir "$OUTPKG"
+}
+
+# Hide outputs when unnecessary
+mkdir() {
+  command mkdir -p "$@" >/dev/null
+}
+rm() {
+  command rm "$@" >/dev/null
+}
+mv() {
+  command mv "$@" >/dev/null
+}
+cp() {
+  command cp "$@" >/dev/null
+}
+
+# Error handling
+error() {
+  echo "$@" 2>&1
+}
+
+# make
+makereal() {
+  cd_src
+  command make "$@"
+  cd_pwd
+}
+makeprep() {
+  # Wipe previous builds for this target
+  rm -rf "$OUT"
+  rm -rf "$OUTPKG"
+
+  # Print the lunch target
+  lunch_print
+}
+
+# OpenWRT commands
+diffconfig() {
+  cd_src
+  ./scripts/diffconfig.sh > "$1"
+  cd_pwd
+}
+feeds() {
+  cd_src
+  ./scripts/feeds "$@"
+  cd_pwd
+}
+
+# config
+makecfg() {
+  config "$@"
+}
+makeconf() {
+  config "$@"
+}
+makeconfig() {
+  config "$@"
+}
+
+# firmware
+build() {
+  firmware "$@"
+}
+make() {
+  firmware "$@"
+}
+
+# package
+makepkg() {
+  package "$@"
+}
+

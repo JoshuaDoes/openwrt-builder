@@ -18,46 +18,10 @@ export OUTPKG=""
 export SYSUPGRADE=""
 export FIRMWARE=""
 
-# Navigation handling
-cd_pwd() {
-  cd "$ROOT"
-}
-cd_builder() {
-  cd "$SRC"
-}
-cd_cfg() {
-  cd "$CFG"
-}
-cd_feed() {
-  cd "$FEED"
-}
-cd_out() {
-  cd "$OUT"
-}
-cd_outpkg() {
-  cd "$OUTPKG"
-}
-
-# Hide outputs when unnecessary
-mkdir() {
-  command mkdir "$@" >/dev/null
-}
-rm() {
-  command rm "$@" >/dev/null
-}
-mv() {
-  command mv "$@" >/dev/null
-}
-cp() {
-  command cp "$@" >/dev/null
-}
-
-# Error handling
-error() {
-  echo "$@" 2>&1
-}
-
 . "$BUILD/lunch"
 . "$BUILD/sync"
+. "$BUILD/config"
+. "$BUILD/firmware"
+. "$BUILD/package"
 . "$BUILD/sysupgrade"
-. "$BUILD/make"
+. "$BUILD/wrappers"
