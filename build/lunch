@@ -3,6 +3,12 @@ targets() {
 }
 target() {
   if [ -z "$1" ] && [ -n "$ID" ]; then
+    if [ "$(build_type)" == "0" ]; then
+      warn "      TYPE: snapshot"
+    else
+      warn "      TYPE: release"
+    fi
+    warn "   VERSION: $(build_tag)"
     warn "        ID: $ID"
     warn "      ARCH: $ARCH"
     warn "  PLATFORM: $PLATFORM"

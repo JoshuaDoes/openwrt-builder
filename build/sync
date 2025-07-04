@@ -1,28 +1,38 @@
 update_feeds() {
   if [ -d "$FEED" ]; then
     cd_feed
+
     # Start with our base feeds list
     if [ -f "feeds.conf" ]; then
+      warn "Installing custom feeds"
       cp "feeds.conf" "$SRC/feeds.conf"
     else
+      warn "Installing default feeds"
       cp "$SRC/feeds.conf.default" "$SRC/feeds.conf"
     fi
+
     # Install our local feeds
     for feed in *; do
       if [ -d "$feed" ]; then
         feed=$(basename "$feed")
+        warn "Installing local feed $feed"
         echo "src-link $feed $FEED/$feed" >> "$SRC/feeds.conf"
       fi
     done
+
     # Update local git repos
+    warn "Checking for updates to local feeds"
     find . -type d -name .git -exec git --git-dir={} --work-tree="$PWD"/{}/.. pull \;
   fi
 
   # Update the package feeds
+  info "Updating list of packages from all feeds"
   feeds update -a
+  info "Installing all packages from all feeds"
   feeds install -a
 
   # Download OpenWRT build dependencies (skips cached!)
+  info "Downloading missing build dependencies from OpenWRT"
   makereal download
 }
 update_src() {
@@ -38,6 +48,43 @@ update_src() {
     # Clone a fresh copy if the source tree doesn't exist
     git clone "$GIT" "$SRC"
   fi
+
+  cd_src
+
+  # Get the details about the current source tree to update
+  tag=$(build_tag $1)
+  if [ "$(build_type $1)" == "0" ]; then
+    warn "Checking for updates to OpenWRT snapshot"
+  else
+    warn "Checking for updates to OpenWRT $tag"
+  fi
+
+  # Update the source tree
+  git fetch -t
+  if git checkout "$tag" >/dev/null 2>&1; then
+    if git symbolic-ref HEAD &>/dev/null; then
+      git pull
+    fi
+    info "Finished updating OpenWRT $tag"
+  else
+    error "Failed to switch to OpenWRT $tag!"
+  fi
+
+  cd_pwd
+}
+sync() {
+  # Check for OpenWRT updates
+  update_src "$@"
+
+  if [ -z "$ID" ]; then
+    target
+  else
+    # Update feeds list and download missing build dependencies
+    update_feeds
+  fi
+}
+
+build_tag() {
   cd_src
 
   # Get the current tag, defaulting to main for snapshot builds
@@ -56,35 +103,21 @@ update_src() {
     esac
   fi
 
-  # Get the build type (0=snapshot, 1=release)
-  type=1
-  if [ "$tag" == "main" ]; then
-    type=0
-    warn "Checking for updates to OpenWRT snapshot"
-  else
-    warn "Checking for updates to OpenWRT $tag"
+  if [ "$tag" == "master" ]; then
+    tag="main"
   fi
-
-  # Update the source tree
-  git fetch -t
-  if git checkout "$tag" >/dev/null 2>&1; then
-    if git symbolic-ref HEAD &>/dev/null; then
-      git pull
-    fi
-  else
-    error "Failed to switch to OpenWRT $tag!"
-  fi
+  echo "$tag"
 
   cd_pwd
 }
-sync() {
-  # Check for OpenWRT updates
-  update_src "$@"
-
-  if [ -z "$ID" ]; then
-    error "Must lunch a target to update package feeds!"
+build_type() {
+  tag="$(build_tag)"
+  if [ -n "$1" ]; then
+    tag="$(build_tag $1)"
+  fi
+  if [ "$tag" == "main" ]; then
+    echo 0
   else
-    # Update feeds list and download missing build dependencies
-    update_feeds
+    echo 1
   fi
 }
