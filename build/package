@@ -11,6 +11,7 @@ package_out() {
             mkdir "$OUTPKG/$feed"
             mv "$file" "$OUTPKG/$feed/"
             info "Installed $feed/$file"
+            warn "$(ls -l "$OUTPKG/$feed/$file")"
           fi
         done
         cd ..
@@ -35,9 +36,6 @@ package_build() {
 
   # Move the final output out of the tree
   package_out "$PACKAGE"
-
-  info "OUTPKG: $OUTPKG"
-  info "$(ls -l "$OUTPKG")"
 }
 package() {
   if [ -z "$ID" ]; then
