@@ -54,7 +54,7 @@ clean() {
 }
 makeprep() {
   clean
-  lunch_print
+  target
 }
 makereal() {
   cd_src

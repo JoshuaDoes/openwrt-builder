@@ -1,15 +1,20 @@
-lunch_ls() {
+targets() {
   ls "$TARGET"
 }
-lunch_print() {
-  echo "      ARCH: $ARCH"
-  echo "  PLATFORM: $PLATFORM"
-  echo "    CPUABI: $CPUABI"
-  echo "   PROFILE: $PROFILE"
-  echo "       OUT: $OUT"
-  echo "    OUTPKG: $OUTPKG"
-  echo "SYSUPGRADE: $SYSUPGRADE"
-  echo "  FIRMWARE: $FIRMWARE"
+target() {
+  if [ -z "$1" ] && [ -n "$ID" ]; then
+    echo "        ID: $ID"
+    echo "      ARCH: $ARCH"
+    echo "  PLATFORM: $PLATFORM"
+    echo "    CPUABI: $CPUABI"
+    echo "   PROFILE: $PROFILE"
+    echo "       OUT: $OUT"
+    echo "    OUTPKG: $OUTPKG"
+    echo "SYSUPGRADE: $SYSUPGRADE"
+    echo "  FIRMWARE: $FIRMWARE"
+  else
+    lunch "$1"
+  fi
 }
 lunch() {
   if [ -z "$1" ]; then
@@ -22,7 +27,7 @@ lunch() {
     fi
     if [ ! -f "$IMPORT" ]; then
       error "Your lunch target is not valid!"
-      lunch_ls
+      targets
     else
       . "$BUILD/clearvars"
       . "$IMPORT"
@@ -38,7 +43,7 @@ lunch() {
       export FIRMWARE="$OUT/openwrt-$ID-squashfs-sysupgrade.bin"
       export SYSUPGRADE="sysupgrade/$ID"
       config
-      lunch_print
+      target
     fi
   fi
 }

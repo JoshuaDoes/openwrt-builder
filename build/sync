@@ -46,7 +46,7 @@ sync() {
   # Check for OpenWRT updates
   update_src
 
-  if [ -z "$ARCH" ] || [ -z "$PLATFORM" ]; then
+  if [ -z "$ID" ]; then
     error "Must lunch a target to update package feeds!"
   else
     # Update feeds list and download missing build dependencies

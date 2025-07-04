@@ -33,6 +33,10 @@ config_build() {
   cd_pwd
 }
 config() {
-  config_build
-  makereal defconfig
+  if [ -z "$ID" ]; then
+    error "Must lunch a target!"
+  else
+    config_build
+    makereal defconfig
+  fi
 }
