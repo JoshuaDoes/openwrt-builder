@@ -44,6 +44,9 @@ error() {
 }
 
 # make
+clearvars() {
+  . "$BUILD/clearvars"
+}
 clean() {
   # Wipe previous builds for this target
   rm -rf "$OUT"
