@@ -36,7 +36,7 @@ jobs:
           export BUILD_TARGET="${{ matrix.target }}"
           dash -c '
             cd openwrt-builder
-            . build/envsetup.sh
+            . build/envsetup
             sync release
             lunch "$BUILD_TARGET"
             sync
