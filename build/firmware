@@ -1,11 +1,13 @@
 firmware_out() {
   mkdir_out
+  cd_src
   for file in \
     "openwrt-$ID-squashfs-factory.img" \
     "openwrt-$ID-squashfs-sysupgrade.bin"
   do
     mv bin/targets/"$ARCH"/"$PLATFORM"/"$file" "$OUT/"
   done
+  cd_pwd
 }
 firmware_build() {
   # Prepare the build environment
