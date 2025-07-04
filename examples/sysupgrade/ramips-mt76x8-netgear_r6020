@@ -16,7 +16,7 @@ HOST="openwrt"
 # Define the filename from the build framework and where to install it.
 ## OpenWRT sysupgrade requires the install location be from /tmp due to limited storage sizes.
 ## It might help to add a check to make sure there's enough free space in the tmpfs mount.
-NAME="$(basename $FW)"
+NAME=$(basename "$FW")
 INST="/tmp/$NAME"
 echo "Sideloading now: $NAME"
 
