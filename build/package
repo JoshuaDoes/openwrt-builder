@@ -21,8 +21,8 @@ package_build() {
   # Move the final output out of the tree
   package_out "$PACKAGE"
 
-  echo "OUTPKG: $OUTPKG"
-  ls -l "$OUTPKG"
+  info "OUTPKG: $OUTPKG"
+  info $(ls -l "$OUTPKG")
 }
 package() {
   if [ -z "$ID" ]; then

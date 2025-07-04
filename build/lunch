@@ -3,15 +3,15 @@ targets() {
 }
 target() {
   if [ -z "$1" ] && [ -n "$ID" ]; then
-    echo "        ID: $ID"
-    echo "      ARCH: $ARCH"
-    echo "  PLATFORM: $PLATFORM"
-    echo "    CPUABI: $CPUABI"
-    echo "   PROFILE: $PROFILE"
-    echo "       OUT: $OUT"
-    echo "    OUTPKG: $OUTPKG"
-    echo "SYSUPGRADE: $SYSUPGRADE"
-    echo "  FIRMWARE: $FIRMWARE"
+    warn "        ID: $ID"
+    warn "      ARCH: $ARCH"
+    warn "  PLATFORM: $PLATFORM"
+    warn "    CPUABI: $CPUABI"
+    warn "   PROFILE: $PROFILE"
+    warn "       OUT: $OUT"
+    warn "    OUTPKG: $OUTPKG"
+    warn "SYSUPGRADE: $SYSUPGRADE"
+    warn "  FIRMWARE: $FIRMWARE"
   else
     lunch "$1"
   fi

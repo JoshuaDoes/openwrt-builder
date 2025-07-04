@@ -10,12 +10,12 @@ config_build() {
   echo "CONFIG_TARGET_${ARCH}=y" >> .config
   echo "CONFIG_TARGET_${ARCH}_${PLATFORM}=y" >> .config
   if [ -n "$PROFILE" ] && [ "$PROFILE" != "generic" ]; then
-    echo "Installing config for $ARCH/$PLATFORM/$PROFILE"
+    warn "Installing config for $ARCH/$PLATFORM/$PROFILE"
     {
       echo "CONFIG_TARGET_${ARCH}_${PLATFORM}_DEVICE_${PROFILE}=y"
     } >> .config
   else
-    echo "Installing generic config for $ARCH/$PLATFORM"
+    warn "Installing generic config for $ARCH/$PLATFORM"
     {
       echo "CONFIG_TARGET_MULTI_PROFILE=y"
       echo "CONFIG_TARGET_ALL_PROFILES=y"

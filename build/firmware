@@ -27,8 +27,8 @@ firmware_build() {
 
   # Check to make sure that the build succeeded
   if [ -f "$FIRMWARE" ]; then
-    echo "OUT: $OUT"
-    ls -l "$OUT"
+    info "OUT: $OUT"
+    info $(ls -l "$OUT")
   else
     error "Failed to build a firmware image!"
   fi

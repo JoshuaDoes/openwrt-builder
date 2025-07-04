@@ -38,9 +38,15 @@ cp() {
   command cp "$@" >/dev/null
 }
 
-# Error handling
+# Message handling
+info() {
+  green "$@"
+}
+warn() {
+  yellow "$@" 2>&1
+}
 error() {
-  echo "$@" 2>&1
+  red "$@" 2>&1
 }
 
 # make
@@ -66,7 +72,7 @@ makereal() {
 diffconfig() {
   cd_src
   ./scripts/diffconfig.sh > "$1"
-  echo "Wrote diffconfig to $1"
+  info "Wrote diffconfig to $1"
   cd_pwd
 }
 feeds() {
