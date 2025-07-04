@@ -12,15 +12,15 @@ lunch_print() {
   echo "  FIRMWARE: $FIRMWARE"
 }
 lunch() {
-  if [[ -z "$1" ]]; then
+  if [ -z "$1" ]; then
     error "You must specify a lunch target!"
     ls "$TARGET"
   else
     IMPORT="$1"
-    if [[ ! -f "$1" ]]; then
+    if [ ! -f "$1" ]; then
       IMPORT="$TARGET/$1"
     fi
-    if [[ ! -f "$IMPORT" ]]; then
+    if [ ! -f "$IMPORT" ]; then
       error "Your lunch target is not valid!"
       lunch_ls
     else
@@ -29,7 +29,7 @@ lunch() {
       export OUTPKG="$OUT/packages"
       export FIRMWARE="$OUT/openwrt-$ARCH-$PLATFORM-$PROFILE-squashfs-sysupgrade.bin"
       export SYSUPGRADE="sysupgrade/$ARCH-$PLATFORM-$PROFILE"
-      if [[ -z "$PROFILE" ]]; then
+      if [ -z "$PROFILE" ]; then
         export PROFILE="generic"
         FIRMWARE="$OUT/openwrt-$ARCH-$PLATFORM-squashfs-sysupgrade.bin"
         SYSUPGRADE="sysupgrade/$ARCH-$PLATFORM"

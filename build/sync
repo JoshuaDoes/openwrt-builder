@@ -1,21 +1,21 @@
 update_feeds() {
-  if [[ -d "$FEED" ]]; then
+  if [ -d "$FEED" ]; then
     cd_feed
     # Start with our base feeds list
-    if [[ -f "feeds.conf" ]]; then
+    if [ -f "feeds.conf" ]; then
       cp "feeds.conf" "$SRC/feeds.conf"
     else
       cp "$SRC/feeds.conf.default" "$SRC/feeds.conf"
     fi
     # Install our local feeds
     for feed in */; do
-      if [[ -d "$feed" ]]; then
-        feed="$(basename $feed)"
+      if [ -d "$feed" ]; then
+        feed=$(basename "$feed")
         echo "src-link $feed $FEED/$feed" >> "$SRC/feeds.conf"
       fi
     done
     # Update local git repos
-    find . -type d -name .git -exec git --git-dir={} --work-tree=$PWD/{}/.. pull \;
+    find . -type d -name .git -exec git --git-dir={} --work-tree="$PWD"/{}/.. pull \;
     cd_pwd
   fi
 
@@ -29,9 +29,9 @@ update_feeds() {
 }
 update_src() {
   # Check if the source tree exists
-  if [[ -d "$SRC" ]]; then
+  if [ -d "$SRC" ]; then
     # Check if we can just update the tree
-    if [[ -d "$SRC/.git" ]]; then
+    if [ -d "$SRC/.git" ]; then
       cd_builder
       git pull
     else
@@ -40,7 +40,7 @@ update_src() {
     fi
   fi
   # Clone a fresh copy if the source tree doesn't exist
-  if [[ ! -d "$SRC" ]]; then
+  if [ ! -d "$SRC" ]; then
     git clone "$GIT" "$SRC"
   fi
 }
@@ -48,7 +48,7 @@ sync() {
   # Check for OpenWRT updates
   update_src
 
-  if [[ -z "$ARCH" || -z "$PLATFORM" ]]; then
+  if [ -z "$ARCH" ] || [ -z "$PLATFORM" ]; then
     error "Must lunch a target to update package feeds!"
   else
     # Update feeds list and download missing build dependencies

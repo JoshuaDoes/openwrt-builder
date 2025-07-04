@@ -1,4 +1,4 @@
-GIT="https://github.com/openwrt/openwrt"
+export GIT="https://github.com/openwrt/openwrt"
 
 # Directory macros
 export ROOT="$PWD"

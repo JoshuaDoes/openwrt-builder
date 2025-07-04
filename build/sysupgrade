@@ -3,18 +3,18 @@
 ## If no firmware image exists yet, one will be made to use.
 ## Re-run make before sysupgrade if you need to sideload fresh builds.
 sysupgrade() {
-  if [[ -z "$ARCH" || -z "$PLATFORM" ]]; then
+  if [ -z "$ARCH" ] || [ -z "$PLATFORM" ]; then
     error "Must lunch a target to sysupgrade!"
   else
-    if [[ -f "$FIRMWARE" ]]; then
-      if [[ -f "$SYSUPGRADE" ]]; then
+    if [ -f "$FIRMWARE" ]; then
+      if [ -f "$SYSUPGRADE" ]; then
         bash "$SYSUPGRADE"
       else
         error "Sysupgrade script not found!"
       fi
     else
       make
-      if [[ -f "$FIRMWARE" ]]; then
+      if [ -f "$FIRMWARE" ]; then
         chmod +x "$SYSUPGRADE"
         bash "$SYSUPGRADE"
       else
