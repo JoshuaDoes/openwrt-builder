@@ -33,9 +33,9 @@ lunch() {
         ID="$ARCH-$PLATFORM"
         IDP="$ARCH/$PLATFORM"
       fi
-      export FIRMWARE="$OUT/openwrt-$ID-squashfs-sysupgrade.bin"
       export OUT="$ROOT/out/$IDP"
       export OUTPKG="$OUT/packages"
+      export FIRMWARE="$OUT/openwrt-$ID-squashfs-sysupgrade.bin"
       export SYSUPGRADE="sysupgrade/$ID"
       config
       lunch_print
