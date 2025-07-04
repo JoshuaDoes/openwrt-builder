@@ -22,7 +22,7 @@ package_build() {
   package_out "$PACKAGE"
 
   info "OUTPKG: $OUTPKG"
-  info $(ls -l "$OUTPKG")
+  info "$(ls -l "$OUTPKG")"
 }
 package() {
   if [ -z "$ID" ]; then

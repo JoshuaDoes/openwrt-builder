@@ -18,7 +18,7 @@ HOST="openwrt"
 ## It might help to add a check to make sure there's enough free space in the tmpfs mount.
 NAME=$(basename "$FW")
 INST="/tmp/$NAME"
-echo "Sideloading now: $NAME"
+warn "Sideloading now: $NAME"
 
 # Upload the firmware to the host with SCP.
 if scp "$FW" "$HOST:$INST"; then
