@@ -20,7 +20,7 @@ firmware_build() {
   # Build the OpenWRT firmware
   if [ -z "$1" ]; then
     # Use our own defaults
-    makereal -j "$(nproc)" V=s
+    makereal -j "$(nproc)"
   else
     # Use the provided arguments, discarding what we'd set
     makereal "$@"

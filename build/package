@@ -29,10 +29,10 @@ package_build() {
   makeprep
 
   # Clean any old builds of the specified package
-  makereal "package/$PACKAGE/clean" -j "$(nproc)" V=s
+  makereal "package/$PACKAGE/clean" -j "$(nproc)"
 
   # Build the specified package
-  makereal "package/$PACKAGE/compile" -j "$(nproc)" V=s
+  makereal "package/$PACKAGE/compile" -j "$(nproc)"
 
   # Move the final output out of the tree
   package_out "$PACKAGE"
