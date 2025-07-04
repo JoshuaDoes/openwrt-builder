@@ -15,7 +15,6 @@ config_build() {
       echo "CONFIG_TARGET_${ARCH}_${PLATFORM}_DEVICE_${PROFILE}=y"
     } >> .config
   else
-    echo "[TODO] Support generic profile for install_out"
     echo "Installing generic config for $ARCH/$PLATFORM"
     {
       echo "CONFIG_TARGET_MULTI_PROFILE=y"

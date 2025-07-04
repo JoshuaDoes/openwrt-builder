@@ -1,0 +1,9 @@
+# Target macros
+export ARCH=""
+export PLATFORM=""
+export CPUABI=""
+export PROFILE=""
+export OUT=""
+export OUTPKG=""
+export SYSUPGRADE=""
+export FIRMWARE=""

@@ -8,16 +8,7 @@ export CFG="$ROOT/configs"
 export FEED="$ROOT/feeds"
 export TARGET="$ROOT/targets"
 
-# Target macros
-export ARCH=""
-export PLATFORM=""
-export CPUABI=""
-export PROFILE=""
-export OUT=""
-export OUTPKG=""
-export SYSUPGRADE=""
-export FIRMWARE=""
-
+. "$BUILD/clearvars"
 . "$BUILD/lunch"
 . "$BUILD/sync"
 . "$BUILD/config"

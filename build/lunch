@@ -24,6 +24,7 @@ lunch() {
       error "Your lunch target is not valid!"
       lunch_ls
     else
+      . "$BUILD/clearvars"
       . "$IMPORT"
       export ID="$ARCH-$PLATFORM-$PROFILE"
       export IDP="$ARCH/$PLATFORM/$PROFILE"
