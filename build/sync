@@ -8,7 +8,7 @@ update_feeds() {
       cp "$SRC/feeds.conf.default" "$SRC/feeds.conf"
     fi
     # Install our local feeds
-    for feed in */; do
+    for feed in *; do
       if [ -d "$feed" ]; then
         feed=$(basename "$feed")
         echo "src-link $feed $FEED/$feed" >> "$SRC/feeds.conf"

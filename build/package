@@ -1,9 +1,23 @@
 package_out() {
   mkdir_outpkg
   cd_src
-  for file in "$1"-*.apk "$1"-*.opkg; do
-    mv bin/packages/"$CPUABI"/*/"$file" "$OUTPKG/"
-  done
+  pkgs="bin/packages/$CPUABI"
+  if cd "$pkgs"; then
+    for feed in *; do
+      if [ -d "$feed" ]; then
+        cd "$feed"
+        for file in "$1"-*.apk "$1"-*.opkg; do
+          if [ -f "$file" ]; then
+            mv "$file" "$OUTPKG/"
+            info "Installed $feed/$file"
+          fi
+        done
+        cd ..
+      fi
+    done
+  else
+    error "Failed to find built package feeds for $CPUABI!"
+  fi
   cd_pwd
 }
 package_build() {
