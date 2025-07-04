@@ -34,18 +34,16 @@ jobs:
       - name: Run POSIX-compliant build using dash
         run: |
           export BUILD_TARGET="${{ matrix.target }}"
-          dash -c '
-            cd openwrt-builder
-            . build/envsetup
-            sync release
-            lunch "$BUILD_TARGET"
-            sync
-            make
-            sync snapshot
-            lunch "$BUILD_TARGET"
-            make
-            zip -r "../openwrt-builder-$BUILD_TARGET.zip" out/
-          '
+          cd openwrt-builder
+          . build/envsetup
+          sync release
+          lunch "$BUILD_TARGET"
+          sync
+          make
+          sync snapshot
+          lunch "$BUILD_TARGET"
+          make
+          zip -r "../openwrt-builder-$BUILD_TARGET.zip" out/
 
       - name: Upload firmware artifact
         uses: actions/upload-artifact@v4
