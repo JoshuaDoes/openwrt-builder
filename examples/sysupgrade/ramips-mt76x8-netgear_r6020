@@ -1,6 +1,3 @@
-# This sample only works if you have the `openssh-sftp-server` package on your OpenWRT host!
-## If installing it is not an option for you, consider writing (and submitting!) a custom alternative.
-
 # Import the build environment to access its commands.
 ## Copy out the firmware image path, it will be overwritten by this.
 FW="$FIRMWARE"
@@ -20,9 +17,9 @@ NAME=$(basename "$FW")
 INST="/tmp/$NAME"
 warn "Sideloading now: $NAME"
 
-# Upload the firmware to the host with SCP.
-if scp "$FW" "$HOST:$INST"; then
-  # Use SSH to run sysupgrade on the host.
+# Upload the firmware to the host with SSH and cat.
+if ssh "$HOST" "cat > $INST" < "$FW"; then
+  # Install the firmware on the host with SSH and sysupgrade.
   # It will close all shells, which forcefully ends our connection.
   ## It would be wise to use this opportunity to check the returned error if automation is a concern.
   ## Otherwise, just pay attention like you would while doing a manual install. 
