@@ -101,10 +101,10 @@ jobs:
         if: ${{ steps.restore-cache.outputs.cache-hit }}
         continue-on-error: true
         run: |
-          gh extension install actions/gh-actions-cache
-          gh-actions-cache delete "${{ env.cache-key }}" --confirm
+          gh cache delete "${{ env.cache-key }}"
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_REPO: ${{ github.repository }}
 
       - name: Save OpenWRT builder cache
         uses: actions/cache/save@v3
