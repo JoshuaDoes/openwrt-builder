@@ -36,29 +36,30 @@ jobs:
           path: openwrt-builder
           key: ${{ env.cache-key }}
 
-      - name: Check if the OpenWRT builder exists
-        id: check
+      - name: Keep the OpenWRT source tree safe
         run: |
-          if [ ! -d "openwrt-builder/.git" ]; then
-            echo "exists=false" >> $GITHUB_OUTPUT
-          else
-            echo "exists=true" >> $GITHUB_OUTPUT
+          if [ -d openwrt-builder/src ]; then
+            mv openwrt-builder/src src
           fi
 
       - name: Clone the OpenWRT builder
-        if: steps.check.outputs.exists == 'false'
         uses: actions/checkout@v4
         with:
           path: openwrt-builder
 
-      - name: Clone JoshuaDoes/luci-theme-material3 into joshuadoes feed
-        if: steps.check.outputs.exists == 'false'
+      - name: Clone JoshuaDoes/luci-theme-material3 into feed joshuadoes
         uses: actions/checkout@v4
         with:
           path: openwrt-builder/feeds/joshuadoes/luci-theme-material3
           repository: JoshuaDoes/luci-theme-material3
 
-      - name: Install dependencies
+      - name: Restore the OpenWRT source tree if it exists
+        run: |
+          if [ -d src ]; then
+            mv src openwrt-builder/src
+          fi
+
+      - name: Install the build dependencies for OpenWRT
         run: |
           sudo apt-get update
           sudo apt-get install -y build-essential clang flex bison g++ gawk \
@@ -66,22 +67,29 @@ jobs:
             rsync unzip zlib1g-dev file wget python3 python3-pip libelf-dev ccache \
             qemu-utils
 
-      - name: Build firmware
+      - name: Sync the source trees
         run: |
           set +e
           cd openwrt-builder
-          git pull
           cp -R .github/workflows/openwrt-build/* .
           . build/envsetup
           sync "${{ matrix.version }}"
           lunch "${{ matrix.lunch }}"
           sync
+          cd ..
+
+      - name: Build the OpenWRT firmware
+        run: |
+          set +e
+          cd openwrt-builder
+          . build/envsetup
+          lunch "${{ matrix.lunch }}"
           make
           package luci-theme-material3
           echo "out=$OUT" >> $GITHUB_ENV
           cd ..
 
-      - name: Upload firmware artifact
+      - name: Upload the OpenWRT firmware
         uses: actions/upload-artifact@v4
         with:
           name: openwrt-${{ matrix.version }}-${{ matrix.lunch }}
@@ -89,7 +97,7 @@ jobs:
           compression-level: 0
           if-no-files-found: error
 
-      - name: Clean outputs
+      - name: Clean the builder outputs
         run: |
           set +e
           cd openwrt-builder
@@ -97,7 +105,7 @@ jobs:
           clean
           cd ..
 
-      - name: Delete previous cache before saving new
+      - name: Delete previous OpenWRT builder cache before saving new
         if: ${{ steps.restore-cache.outputs.cache-hit }}
         continue-on-error: true
         run: |
