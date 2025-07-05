@@ -15,6 +15,9 @@ jobs:
     name: Build OpenWRT ${{ matrix.version }} for ${{ matrix.lunch }}
     runs-on: ubuntu-latest
 
+    env:
+      cache-key: ${{ runner.os }}-${{ matrix.version }}-${{ matrix.lunch }}
+
     strategy:
       fail-fast: false
       matrix:
@@ -31,7 +34,7 @@ jobs:
         uses: actions/cache/restore@v3
         with:
           path: openwrt-builder
-          key: ${{ runner.os }}-${{ matrix.version }}-${{ matrix.lunch }}
+          key: ${{ env.cache-key }}
 
       - name: Check if the OpenWRT builder exists
         id: check
@@ -94,8 +97,17 @@ jobs:
           clean
           cd ..
 
+      - name: Delete previous cache before saving new
+        if: ${{ steps.restore-cache.outputs.cache-hit }}
+        continue-on-error: true
+        run: |
+          gh extension install actions/gh-actions-cache
+          gh-actions-cache delete "${{ env.cache-key }}" --confirm
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
       - name: Save OpenWRT builder cache
         uses: actions/cache/save@v3
         with:
           path: openwrt-builder
-          key: ${{ steps.restore-cache.outputs.cache-primary-key }}
+          key: ${{ env.cache-key }}
