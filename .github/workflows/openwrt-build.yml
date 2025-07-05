@@ -61,19 +61,19 @@ jobs:
         run: |
           set +e
           cd openwrt-builder
-          echo "Current workdir: $PWD"
-          ls -la
-          echo
-          cp -R .github-actions/openwrt-build/* .
+          git pull
+          cp -R .github/workflows/openwrt-build/* .
           . build/envsetup
           sync "${{ matrix.version }}"
           lunch "${{ matrix.lunch }}"
           sync
           make
-          zip -r ../openwrt.zip "out/${{ matrix.version }}/"
+          echo "out=$OUT" >> $GITHUB_ENV
 
       - name: Upload firmware artifact
         uses: actions/upload-artifact@v4
         with:
           name: openwrt-${{ matrix.version }}-${{ matrix.lunch }}
-          path: openwrt.zip
+          path: ${{ env.out }}
+          compression-level: 0
+          if-no-files-found: error
