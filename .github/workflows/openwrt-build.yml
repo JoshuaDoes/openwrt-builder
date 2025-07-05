@@ -59,11 +59,11 @@ jobs:
 
       - name: Build firmware
         run: |
+          set +e
+          cd openwrt-builder
           echo "Current workdir: $PWD"
           ls -la
           echo
-          set +e
-          cd openwrt-builder
           cp -R .github-actions/openwrt-build/* .
           . build/envsetup
           sync "${{ matrix.version }}"
