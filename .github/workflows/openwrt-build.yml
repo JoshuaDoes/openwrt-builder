@@ -3,7 +3,12 @@ name: Build OpenWRT firmware
 on:
   workflow_dispatch:
   push:
-    branches: [ dev ]
+    branches:
+      - dev
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   build:
