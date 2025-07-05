@@ -50,6 +50,7 @@ jobs:
         run: |
           set +e
           cd openwrt-builder
+          cp -R .github/workflows/openwrt-builder/* .
           . build/envsetup
           sync "${{ matrix.version }}"
           lunch "${{ matrix.lunch }}"

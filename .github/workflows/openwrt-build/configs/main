@@ -1,0 +1,17 @@
+# Use the latest Linux LTS kernel
+CONFIG_TESTING_KERNEL=y
+
+# Build dropbear with ed25519 key support
+CONFIG_DROPBEAR_ED25519=y
+
+# Install an SFTP server for smooth sideloading support
+CONFIG_PACKAGE_openssh-sftp-server=y
+
+# Install nano as a vim alternative
+CONFIG_PACKAGE_nano-full=y
+
+# Install LuCI
+CONFIG_PACKAGE_luci=y
+
+# Install our Material Design 3 theme for LuCI
+CONFIG_PACKAGE_luci-theme-material3=y
