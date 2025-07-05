@@ -77,6 +77,7 @@ jobs:
           echo ""
           sync
           make
+          package luci-theme-material3
           echo "out=$OUT" >> $GITHUB_ENV
 
       - name: Upload firmware artifact
