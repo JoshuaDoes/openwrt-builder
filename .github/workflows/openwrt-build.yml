@@ -16,7 +16,7 @@ jobs:
     runs-on: ubuntu-latest
 
     env:
-      cache-key: ${{ runner.os }}-${{ matrix.version }}-${{ matrix.lunch }}
+      cache-key: ${{ matrix.version }}-${{ matrix.lunch }}
 
     strategy:
       fail-fast: false
