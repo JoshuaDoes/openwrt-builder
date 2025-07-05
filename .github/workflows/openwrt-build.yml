@@ -27,12 +27,23 @@ jobs:
           path: openwrt-builder
           key: ${{ runner.os }}-${{ matrix.version }}-${{ matrix.lunch }}
 
+      - name: Check if the OpenWRT builder exists
+        id: check
+        run: |
+          if [ ! -d "openwrt-builder/.git" ]; then
+            echo "exists=false" >> $GITHUB_OUTPUT
+          else
+            echo "exists=true" >> $GITHUB_OUTPUT
+          fi
+
       - name: Clone the OpenWRT builder
+        if: steps.check.outputs.exists == 'false'
         uses: actions/checkout@v4
         with:
           path: openwrt-builder
 
       - name: Clone JoshuaDoes/luci-theme-material3 into joshuadoes feed
+        if: steps.check.outputs.exists == 'false'
         uses: actions/checkout@v4
         with:
           path: openwrt-builder/feeds/joshuadoes/luci-theme-material3
