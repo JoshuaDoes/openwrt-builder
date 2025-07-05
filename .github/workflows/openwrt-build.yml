@@ -108,6 +108,7 @@ jobs:
 
       - name: Save OpenWRT builder cache
         uses: actions/cache/save@v3
+        if: always()
         with:
           path: openwrt-builder
           key: ${{ env.cache-key }}
