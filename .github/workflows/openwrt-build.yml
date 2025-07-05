@@ -85,7 +85,6 @@ jobs:
           . build/envsetup
           lunch "${{ matrix.lunch }}"
           make
-          package luci-theme-material3
           echo "out=$OUT" >> $GITHUB_ENV
           cd ..
 
