@@ -1,4 +1,4 @@
-name: Build OpenWRT firmware targets
+name: Build OpenWRT firmware
 
 on:
   workflow_dispatch:
@@ -7,46 +7,58 @@ on:
 
 jobs:
   build:
-    name: Build OpenWRT for ${{ matrix.target }}
+    name: Build OpenWRT ${{ matrix.version }} for ${{ matrix.lunch }}
     runs-on: ubuntu-latest
 
     strategy:
       fail-fast: false
       matrix:
-        target:
+        lunch:
           - netgear_r6020
           - tplink_tl-wdr4300-v1
+        version:
+          - main
+          - v24.10.2
 
     steps:
-      - name: Checkout repository
+      - name: Restore cache of OpenWRT builder if it exists
+        uses: actions/cache@v3
+        with:
+          path: ~/openwrt-builder
+          key: ${{ runner.os }}-${{ matrix.version }}-${{ matrix.lunch }}
+
+      - name: Clone the OpenWRT builder
         uses: actions/checkout@v4
         with:
-          path: openwrt-builder
+          path: ~/openwrt-builder
+
+      - name: Clone JoshuaDoes/luci-theme-material3 into joshuadoes feed
+        uses: actions/checkout@v4
+        with:
+          path: ~/openwrt-builder/feeds/joshuadoes/luci-theme-material3
+          repository: JoshuaDoes/luci-theme-material3
 
       - name: Install dependencies
         run: |
           sudo apt-get update
           sudo apt-get install -y build-essential clang flex bison g++ gawk \
-            gcc-multilib gettext git libncurses-dev libssl-dev python3-setuptools \
+            gcc-multilib gettext libncurses-dev libssl-dev python3-setuptools \
             rsync unzip zlib1g-dev file wget python3 python3-pip libelf-dev ccache \
             qemu-utils
 
-      - name: Run POSIX-compliant build using dash
+      - name: Build firmware
         run: |
           set +e
-          cd openwrt-builder
+          cd ~/openwrt-builder
           . build/envsetup
-          sync release
-          lunch "${{ matrix.target }}"
+          sync "${{ matrix.version }}"
+          lunch "${{ matrix.lunch }}"
           sync
           make
-          sync snapshot
-          lunch "${{ matrix.target }}"
-          make
-          zip -r "../openwrt-builder-${{ matrix.target }}.zip" out/
+          zip -r ~/openwrt.zip "out/${{ matrix.version }}/"
 
       - name: Upload firmware artifact
         uses: actions/upload-artifact@v4
         with:
-          name: openwrt-builder-${{ matrix.target }}
-          path: openwrt-builder-${{ matrix.target }}.zip
+          name: openwrt-${{ matrix.version }}-${{ matrix.lunch }}
+          path: ~/openwrt.zip
