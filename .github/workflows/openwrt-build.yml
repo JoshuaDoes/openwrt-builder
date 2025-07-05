@@ -71,10 +71,6 @@ jobs:
           . build/envsetup
           sync "${{ matrix.version }}"
           lunch "${{ matrix.lunch }}"
-          echo ""
-          echo "Using config:"
-          cat "$OUT/config.buildinfo"
-          echo ""
           sync
           make
           package luci-theme-material3
