@@ -65,6 +65,11 @@ clean() {
   rm -rf "$OUT"
 }
 makeprep() {
+  if [ -d "$FILES" ]; then
+    ln -s "$FILES" "$SRC/files"
+  else
+    rm -f "$SRC/files"
+  fi
   config
   target
 }
