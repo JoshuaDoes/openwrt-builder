@@ -66,6 +66,10 @@ jobs:
           . build/envsetup
           sync "${{ matrix.version }}"
           lunch "${{ matrix.lunch }}"
+          echo ""
+          echo "Using config:"
+          cat "$OUT/config.buildinfo"
+          echo ""
           sync
           make
           echo "out=$OUT" >> $GITHUB_ENV
