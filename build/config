@@ -25,6 +25,7 @@ config_build() {
     cd_cfg
     for cfg in *; do
       if [ -f "$cfg" ]; then
+        warn "Installing custom config: $cfg"
         cat "$cfg" >> "$SRC/.config"
       fi
     done
