@@ -76,6 +76,9 @@ jobs:
           sync "${{ matrix.version }}"
           lunch "${{ matrix.lunch }}"
           sync
+          rm -rf files
+          mkdir -p files
+          cp -R feeds/joshuadoes/luci-theme-material3/root/* files/
           cd ..
 
       - name: Build the OpenWRT firmware
