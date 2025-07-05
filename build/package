@@ -28,11 +28,8 @@ package_build() {
   # Prepare the build environment
   makeprep
 
-  # Clean any old builds of the specified package
-  makereal "package/$PACKAGE/clean" -j "$(nproc)"
-
-  # Build the specified package
-  makereal "package/$PACKAGE/compile" -j "$(nproc)"
+  # Build the package after building dependencies
+  makereal {toolchain,target,package/"$PACKAGE"}/compile -j "$(nproc)"
 
   # Move the final output out of the tree
   package_out "$PACKAGE"
