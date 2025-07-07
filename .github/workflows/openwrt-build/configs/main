@@ -46,9 +46,6 @@ CONFIG_PACKAGE_openssh-sftp-server=y
 # Install nano as a vim alternative
 CONFIG_PACKAGE_nano-full=y
 
-# Install screen to track multiple terminal screens across multiple sessions
-CONFIG_PACKAGE_screen=y
-
 # Install sshfs to be able to mount SSH remotes as network drives
 CONFIG_PACKAGE_sshfs=y
 

@@ -89,7 +89,9 @@ jobs:
           lunch "${{ matrix.lunch }}"
           make
           echo "out=$OUT" >> $GITHUB_ENV
-          cd ..
+          cd src/bin/targets
+          find .
+          cd ../../../../
 
       - name: Upload the OpenWRT firmware
         uses: actions/upload-artifact@v4
