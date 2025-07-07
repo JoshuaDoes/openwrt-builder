@@ -104,7 +104,10 @@ jobs:
           set +e
           cd openwrt-builder
           . build/envsetup
-          clean
+          clean #Removes all exported firmware builds from OpenWRT Builder with no lunch target
+          make dirclean #Removes all except .config, feeds, .ccache and downloaded source files
+          rm -f src/.config
+          rm -f src/feeds.conf
           cd ..
 
       - name: Delete previous OpenWRT builder cache before saving new
