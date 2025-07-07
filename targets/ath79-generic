@@ -2,3 +2,4 @@
 export ARCH="ath79"
 export PLATFORM="generic"
 export CPUABI="mips_24kc"
+export PRODUCT="ath79 generic"

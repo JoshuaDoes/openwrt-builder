@@ -2,3 +2,4 @@
 export ARCH="ramips"
 export PLATFORM="mt76x8"
 export CPUABI="mipsel_24kc"
+export PRODUCT="ramips mt76x8"

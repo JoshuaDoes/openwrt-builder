@@ -13,6 +13,7 @@ target() {
     warn "      ARCH: $ARCH"
     warn "  PLATFORM: $PLATFORM"
     warn "    CPUABI: $CPUABI"
+    warn "   PRODUCT: $PRODUCT"
     warn "   PROFILE: $PROFILE"
     warn "       OUT: $OUT"
     warn "    OUTPKG: $OUTPKG"

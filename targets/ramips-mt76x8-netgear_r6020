@@ -2,4 +2,5 @@
 export ARCH="ramips"
 export PLATFORM="mt76x8"
 export CPUABI="mipsel_24kc"
+export PRODUCT="NETGEAR R6020"
 export PROFILE="netgear_r6020"

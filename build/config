@@ -7,6 +7,7 @@ config_out() {
 config_build() {
   cd_src
   rm .config
+  echo "CONFIG_VERSION_PRODUCT=\"$PRODUCT\"" >> .config
   echo "CONFIG_TARGET_${ARCH}=y" >> .config
   echo "CONFIG_TARGET_${ARCH}_${PLATFORM}=y" >> .config
   if [ -n "$PROFILE" ] && [ "$PROFILE" != "generic" ]; then

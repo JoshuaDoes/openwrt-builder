@@ -2,6 +2,7 @@
 export ARCH=""
 export PLATFORM=""
 export CPUABI=""
+export PRODUCT=""
 export PROFILE=""
 export OUT="$ROOT/out"
 export OUTPKG=""
