@@ -2,7 +2,7 @@
 CONFIG_DEVEL=y
 
 # Dead code and data elimination for all packages
-#CONFIG_USE_GC_SECTIONS=y
+CONFIG_USE_GC_SECTIONS=y
 
 # Use the link-time optimizer for all packages
 #CONFIG_USE_LTO=y
