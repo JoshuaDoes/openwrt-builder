@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
   push:
     paths:
-      - .github/workflows/**
+      - .github/**
       - build/**
       - targets/**
     branches:
@@ -75,7 +75,7 @@ jobs:
         run: |
           set +e
           cd openwrt-builder
-          cp -R .github/workflows/openwrt-build/* .
+          cp -R .github/assets/openwrt-build/* .
           . build/envsetup
           sync "${{ matrix.version }}"
           lunch "${{ matrix.lunch }}"
