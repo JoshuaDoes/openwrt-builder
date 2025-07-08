@@ -5,7 +5,7 @@ CONFIG_DEVEL=y
 #CONFIG_USE_GC_SECTIONS=y
 
 # Use the link-time optimizer for all packages
-#CONFIG_USE_LTO=y
+CONFIG_USE_LTO=y
 
 # Use ccache to improve performance of fresh rebuilds
 CONFIG_CCACHE=y
