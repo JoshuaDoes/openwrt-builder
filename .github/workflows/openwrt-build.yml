@@ -91,7 +91,7 @@ jobs:
           cd openwrt-builder
           . build/envsetup
           lunch "${{ matrix.lunch }}"
-          make -j $(nproc) V=s
+          make -j $(nproc)
           echo "out=$OUT" >> $GITHUB_ENV
           cd src/bin/targets
           find .
