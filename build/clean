@@ -1,0 +1,21 @@
+clean() {
+  if [ -z "$ID" ]; then
+    warn "Removing all built files"
+  else
+    warn "Removing all built files for $ID"
+    error "- $OUTPKG"
+    rm -rf "$OUTPKG"
+  fi
+  error "- $OUT"
+  rm -rf "$OUT"
+}
+cleansrc() {
+  # Removes all except .config, feeds, .ccache and downloaded source files
+  makereal dirclean
+
+  # Remove things that we will regenerate
+  cd_src
+  rm -f .config
+  rm -f feeds.conf
+  cd_pwd
+}

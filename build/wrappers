@@ -53,17 +53,6 @@ error() {
 clearvars() {
   . "$BUILD/clearvars"
 }
-clean() {
-  if [ -z "$ID" ]; then
-    warn "Removing all built files"
-  else
-    warn "Removing all built files for $ID"
-    error "- $OUTPKG"
-    rm -rf "$OUTPKG"
-  fi
-  error "- $OUT"
-  rm -rf "$OUT"
-}
 makeprep() {
   if [ -d "$FILES" ]; then
     ln -s "$FILES" "$SRC/files"
