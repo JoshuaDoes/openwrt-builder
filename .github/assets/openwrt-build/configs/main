@@ -4,6 +4,9 @@ CONFIG_DEVEL=y
 # Dead code and data elimination for all packages
 CONFIG_USE_GC_SECTIONS=y
 
+# Use the link-time optimizer for all packages
+#CONFIG_USE_LTO=y
+
 # Use ccache to improve performance of fresh rebuilds
 CONFIG_CCACHE=y
 
@@ -44,7 +47,7 @@ CONFIG_PACKAGE_openssh-sftp-server=y
 CONFIG_PACKAGE_nano-full=y
 
 # Install sshfs to be able to mount SSH remotes as network drives
-CONFIG_PACKAGE_sshfs=y
+#CONFIG_PACKAGE_sshfs=y
 
 # Install LuCI
 CONFIG_PACKAGE_luci=y
