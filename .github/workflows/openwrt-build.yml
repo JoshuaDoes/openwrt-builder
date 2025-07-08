@@ -3,6 +3,10 @@ name: Build OpenWRT firmware
 on:
   workflow_dispatch:
   push:
+    paths:
+      - .github/workflows/**
+      - build/**
+      - targets/**
     branches:
       - dev
 
