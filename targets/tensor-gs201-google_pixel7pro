@@ -1,0 +1,6 @@
+# Configure the OpenWRT build (required values)
+export ARCH="tensor"
+export PLATFORM="gs201"
+export CPUABI="aarch64"
+export PRODUCT="Google Pixel 7 Pro"
+export PROFILE="google_cheetah"

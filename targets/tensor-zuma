@@ -1,0 +1,5 @@
+# Configure the OpenWRT build (required values)
+export ARCH="tensor"
+export PLATFORM="zuma"
+export CPUABI="aarch64"
+export PRODUCT="Tensor G3"

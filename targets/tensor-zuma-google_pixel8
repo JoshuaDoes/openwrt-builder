@@ -1,0 +1,6 @@
+# Configure the OpenWRT build (required values)
+export ARCH="tensor"
+export PLATFORM="zuma"
+export CPUABI="aarch64"
+export PRODUCT="Google Pixel 8"
+export PROFILE="google_shiba"
