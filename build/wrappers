@@ -55,12 +55,11 @@ clearvars() {
 }
 makeprep() {
   if [ -d "$FILES" ]; then
-    if [ ! -f "$SRC/files" ]; then
-      ln -s "$FILES" "$SRC/files"
-    fi
     #Bugfix: Clean up leftover recursive symlink
-    if [ -f "$FILES/files" ]; then
-      rm -f "$FILES/files"
+    rm -f "$FILES/files"
+    #Build the new symlink
+    if [ ! -d "$SRC/files" ]; then
+      ln -s "$FILES" "$SRC/files"
     fi
   else
     rm -f "$SRC/files"
