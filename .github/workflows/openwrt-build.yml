@@ -28,6 +28,7 @@ jobs:
         lunch:
           - netgear_r6020
           - tplink_tl-wdr4300-v1
+          - google_pixel6pro
         version:
           - main
           - v24.10.2
@@ -77,6 +78,7 @@ jobs:
           cd openwrt-builder
           cp -R .github/assets/openwrt-build/* .
           . build/envsetup
+          export GIT="https://github.com/JoshuaDoes/openwrt"
           sync "${{ matrix.version }}"
           lunch "${{ matrix.lunch }}"
           sync
