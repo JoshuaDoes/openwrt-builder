@@ -4,7 +4,8 @@ firmware_out() {
   for file in \
     "openwrt-$ID-squashfs-factory.img" \
     "openwrt-$ID-squashfs-factory.bin" \
-    "openwrt-$ID-squashfs-sysupgrade.bin"
+    "openwrt-$ID-squashfs-sysupgrade.bin" \
+    "openwrt-$ID-fastboot-boot.img"
   do
     if mv bin/targets/"$ARCH"/"$PLATFORM"/"$file" "$OUT/" 2>/dev/null; then
       info "Installed $file"
