@@ -1,6 +1,7 @@
 firmware_out() {
   mkdir_out
   cd_src
+  #Maintain the preference order, last is most recent to become the firmware
   for file in \
     "openwrt-$ID-squashfs-factory.img" \
     "openwrt-$ID-squashfs-factory.bin" \
@@ -9,6 +10,7 @@ firmware_out() {
   do
     if mv bin/targets/"$ARCH"/"$PLATFORM"/"$file" "$OUT/" 2>/dev/null; then
       info "Installed $file"
+      FIRMWARE="$OUT/$file"
       warn "$(ls -l "$OUT/$file")"
     fi
   done
