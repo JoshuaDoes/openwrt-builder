@@ -28,7 +28,7 @@ jobs:
         lunch:
           - netgear_r6020
           - tplink_tl-wdr4300-v1
-          - google_pixel6pro
+#          - google_pixel6pro
         version:
           - main
           - v24.10.2
