@@ -1,0 +1,5 @@
+# Configure the OpenWRT build (required values)
+export ARCH="ramips"
+export PLATFORM="mt7621"
+export CPUABI="mipsel_24kc"
+export PRODUCT="ramips mt7621"
